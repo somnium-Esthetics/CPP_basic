@@ -1,55 +1,45 @@
 //ch06lab1_원점에서가장먼점.cpp
-/*
-사용자로부터 n개의 점의 좌표(x, y)를 입력받아 각 점의 좌표와  원점으로 부터 거리√(x² + y²)를 출력하고,
-그 중 원점에서 가장 먼 점을 찾아서 출력하는 프로그램을 작성하시오. 점의 정보는 Point 구조체를 선언 사용하시오.
 
-
-
-*/
 #include <iostream>
 #include <cmath>
 using namespace std;
- 
-struct point {
+
+struct point
+{
 	int x;
 	int y;
 
 };
-void len(int* arr );//원점과의 거리 구하는 함수 + 최장거리 구하는 함수
 
+void display(point p) {// 좌표출력
+	cout << "(" << p.x << "," << p.y <<")" << endl;
+
+};
+
+double getDist(point p) {// 거리측정
+	double d;
+	d = sqrt(double(p.x * p.x + p.y * p.y));
+	return d;
+}
 
 int main() {
-	int num = 0;
-	
-	cout << "저장할 좌표 수 :" << endl;
-	cin >> num;
-	int* point = new point[num*2];
-	for (int i = 0; i < num; i++) {
-		cout << "#" << i + 1 << endl;
-		cout << "X: ";
-		cin >> point[2*i+1];
-		cout << endl;
-		cout << "Y: ";
-		cin >> point[2*i+2];
-		cout << endl;
+	cout << "저장할 좌표의 수 :";
+	int n;
+	cin >> n;
+	point* p_s = new point[n];
+	for (int i = 0; i < n; i++) {
+		cin >> p_s[i].x;
+		cin >> p_s[i].y;
+	 }
+	int m_dist = 0;
+	for (int i = 0; i < n; i++) {
+		display(p_s[i]);
 	}
-	//point {1,2,3,4,5,6}
-	len(point);
 
-	
-
+	for (int i = 0; i < n; i++) {
+		cout << "거리:"<<getDist(p_s[i])<<endl;
+	}
+	delete[] p_s;
 	return 0;
 }
-void len(int* arr) {
-	cout << "==============" << endl;
-	
-	for (int i = 0; i < ; i++) {///제한
-		cout << "(" << arr[2*i] << "," << arr[2*i+1] << endl;
-		int ans = sqrt((arr[2 * i] * arr[2 * i]) + (arr[2 * i + 1] * arr[2 * i + 1]));
-		cout << "두 점 사이의 거리 : "<<ans<<endl;
-	
-	}
 
-
-
-}
