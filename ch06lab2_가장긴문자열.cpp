@@ -24,21 +24,24 @@ int main() {
 
 
 
-	char ans[SIZE] = "default";
+	char* ans = NULL;
 	for (int i = 0; i < num; i++) {
-		if (strlen(ans) == 7) {
+		if (ans == NULL) {
+			ans = new char[strlen(words[i]) + 1];
+			//ans = char [SIZE]; 불가
 			strcpy(ans, words[i]);
 		}
 		else {
 			if (strlen(ans) < strlen(words[i])) {
-				strcpy(ans, words[i]);
+				delete[] ans;
+				ans = new char[strlen(words[i]) + 1];
 			}
 		}
 
 
 	}
 	cout << "가장 긴 문자열은 " << ans << "입니다" << endl;
-
+	delete[] ans;
 	delete[] words;
 
 	return 0;
