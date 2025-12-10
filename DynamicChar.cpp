@@ -1,155 +1,131 @@
+//DynamicChar.cpp
+//동적할당 문자열 클래스
+/*
+setChar(index, char) - 인덱스에 문자 할당
+setStr(string) - 문자열 대입, 기존 문자열 삭제 후 대입
+
+getChar(index) - 인덱스 문자 반환
+getStr() - 전체 문자열  반환
+getLength() - 전체 문자열 길이 반환
+
+*/
+#define _CRT_SECURE_NO_WARNINGS 
 #include <iostream>
-
-//string 이랑 char의 혼용 불가한지
-//strcmp, strcpy, strcat
-
+#include <string>
 using namespace std;
-
 
 class DynamicChar {
 public:
-	DynamicChar(int _size) : size(_size>=1 ? _size:1){
-		str = new char[size];
-		cout << "DynamicChar Constructor" << endl;
+	DynamicChar(int _size) : size(_size>=2?_size:10){
+		cout << "constructor" << endl;
+		arr = new char[size];
+
 	}
 	~DynamicChar() {
-		delete[] str;
-		cout << "DynamicChar 소멸자" << endl;
+		cout << "destructor" << endl;
+		delete[] arr;
 	}
-public:
-	void setAt(int _index, char _letter);
-	char getAt(int _index);
-	void setString(const char* setStr);//
-	char* getString();
-	int getLength();
-	void display(int _num);
-	void randUpper();
-	int getlen( const char* _str);
 
 private:
+	char* arr = nullptr;
 	int size;
-	char* str = nullptr;
 
+public:
+	void setChar(int _index, char letter);
+	void setString(const char* strings);//char배열이므로 string 자료형을 매개 변수로 받기 힘듦, const??
+	char getChar(int _index);
+	void getStr();
+	int getLength();
+	void randUpper();
 };
 
-
 int main() {
-	//DynamicChar dc(10);
-	//dc.setAt(0, 'a');
-	//dc.setAt(3, 'b');
-	//dc.setAt(5, 'c');
-	//cout<< dc.getAt(0)<<endl;
-	//cout<< dc.getAt(3)<<endl;
-	//cout<< dc.getAt(5)<<endl;
-	//dc.setString("hello");
-	//cout<< dc.getString()<<endl;
-	//cout << "dc 문자열 수: " << dc.getLength() << endl;
-	//dc.display(5);
-	//dc.display(50);
-	
-	//dc.display(9);
+	srand(unsigned(time(NULL)));
+// 난수 시드는 main에서 한번 돌려주는게 좋음
+	DynamicChar d1 (15) ;
+	d1.setChar(0, 'a');
+	d1.setChar(2, 'b');
+	d1.setChar(4, 'c');
+	cout<< d1.getChar(0)<<endl;
+	cout<< d1.getChar(2)<<endl;
+	cout<< d1.getChar(4)<<endl;
+
+	d1.setString("hello");
+	cout << d1.getLength()<<endl;
+	d1.getStr();
 
 	DynamicChar ucase(20);
 	ucase.randUpper();
-	cout<<ucase.getString() << endl;
-	
-	cout<<ucase.getlen("dynamicChar") <<endl;
+	ucase.getStr();
 
 
 	return 0;
 }
 
-void DynamicChar::setAt(int _index, char _letter)
+void DynamicChar::setChar(int _index, char letter)
 {
-	if (_index <= size) {
-		str[_index] = _letter;
+	if (_index < size - 1) {
+		arr[_index] = letter;
 	}
 	else {
-		cout << "잘못된 사용입니다" << endl;
+		cout << "잘못된 값" << endl;
+		//return
+
 	}
 }
 
-char DynamicChar::getAt(int _index)
+void DynamicChar::setString(const char* strings)
 {
-	return str[_index <= size? _index:0];
-}
-
-
-
-void DynamicChar::setString(const char* setStr)
-{
-	int length = 0;
-	for (length = 0; setStr[length] != '\0'; length++);
-
-	if (length >= size) length = size - 1;
-
-	for (int i = 0; i < length;i++) {
-		setAt(i, setStr[i]);
+	int len = strlen(strings);
+	if (len <= size) {
+		strcpy(arr, strings);
+		arr[size-1] = '\0';
 	}
-	setAt(length, '\0');
-	
+	else {
+		cout << "문자열 길이 초과" << endl;
+	}
 }
 
-char* DynamicChar::getString()
+char DynamicChar::getChar(int _index)
 {
-	return str;
+	if (_index < size - 1) {
+		return arr[_index];
+	}
+	else {
+		return 'X';
+	}
+
+
+}
+
+void DynamicChar::getStr()
+{
+	for (int i = 0; arr[i] != '\0'; i++) {
+		cout << arr[i];
+	}
+	cout << endl;
 }
 
 int DynamicChar::getLength()
 {
-	int strLen = 0;
-	for(strLen=0; str[strLen]!='\0';strLen++)
-	return strLen;
+	return strlen(arr);
 }
 
-void DynamicChar::display(int _num)
+void DynamicChar::randUpper()//배열의 길이만큼 랜덤 대문자 넣기
 {
-	if (_num > size) {// 숫자가 배열보다 큰 경우
-		
-		for (int i = 0; i < size;i++) {
-			cout << str[i];
-		}	
-		cout << endl;
-		cout << "숫자가 큰경우" << endl;
-	
+	for (int i = 0; i < size - 1; i++) {
+		arr[i] = rand() % ('Z' - 'A'+1)  + 'A'; //문자열을 숫자 처럼 연산에 사용 가능!! 중요
 	}
-	
-	else {// 출력 숫자가 배열보다 작은경우
-		for (int i = 0; i < _num;i++) {
-			cout << str[i];
-		}
-		cout << endl;
-		cout << "숫자가 작은경우" << endl;
-	
-
-		
-
-
-	}
-	
-}
-
-void DynamicChar::randUpper()
-{
-	srand(unsigned(time(NULL)));
-	char r;// char 로 받으면 아스키 코드와 문자열을 숫자연산으로 사용가능!!!
-	for (int i = 0; i < size; i++) {
-
-		r = rand() % ('Z' - 'A' + 1) + 'A';
-		setAt(i,r);
-	}
-	setAt(size-1, '\0');
-
+	arr[size - 1] = '\0';
 
 }
 //rand% (500 - 100 +1) +100
 //rand% (B - A +1) +A;   A~B사이의 난수 
 
-
-
-int DynamicChar::getlen( const char* _str)// _str의 문자열의 길이 반환
-{
-	int _strlen = 0;
-	for (_strlen = 0; _str[_strlen] !='\0';_strlen++);
-	return _strlen;
-}
+//중요. 동적할당으로 만들어진 배열은 sizeof로 배열의 크기를 알수 없다
+//동적 할당 배열은 기본적으로 배열 자체를 선언하지 않고 포인터를 선언 배열과 연결시킴
+//따라서 sizeof()안에 배열을 넣으면 배열이 아닌 포인터로 인식함
+//sizeof()를 사용해 배열의 크기를 알수 있는 상황은
+//1. main안에서 배열 자체를 선언하고(int arr [10];) main 안에서 크기를 알아보는 경우
+//2. 함수 내부에서 배열 자체를 선언하고(int arr [10];) 함수 내부에서 알아보는 경우
+//동적char 배열에는 문자열 종결자를 무조건 수동 기입해줘야함
